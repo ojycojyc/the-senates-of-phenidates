@@ -10,7 +10,7 @@ namespace TheSenateMaterials
 
         void Sort();
 
-       Card Read(int position);
+        Card Read(int position);
 
         Card Draw(int position);
 

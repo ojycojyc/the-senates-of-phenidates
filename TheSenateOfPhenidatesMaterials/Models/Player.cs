@@ -8,11 +8,11 @@ namespace TheSenateMaterials
     {
         private IGameService _gameService { get; set; }
         private Guid _id { get; set; }
-        private List<Card> hand { get; set; }
+        private List<Card> Hand { get; set; }
 
 
-        public String name { get; set; }
-        public Factions faction { get; set; }
+        public String Name { get; set; }
+        public Factions Faction { get; set; }
 
         public Player(IGameService gameService)
         {
@@ -22,15 +22,15 @@ namespace TheSenateMaterials
         public Player(String name, Factions faction)
         {
             this._id = Guid.NewGuid();
-            this.name = name;
-            this.faction = faction;
+            this.Name = name;
+            this.Faction = faction;
         }
 
         public void draw()
         {
             //_gameService.game
             Card newCard = new Card();
-            hand.Add(newCard);
+            Hand.Add(newCard);
         }
 
     }

@@ -2,7 +2,7 @@
 
 namespace TheSenateMaterials
 {
-    public class Card: IDisposable
+    public class Card : IDisposable
     {
         #region Properties
 
@@ -31,13 +31,13 @@ namespace TheSenateMaterials
 
         #endregion Properties
 
-        #region Methods
+        #region Action Methods
 
         /// <summary>
         /// Returns information about the card.
         /// </summary>
         /// <returns></returns>
-        public string read()
+        public string Read()
         {
             return $@"Name: {this.Name} 
                       Faction: {this.Faction}
@@ -47,7 +47,7 @@ namespace TheSenateMaterials
         /// <summary>
         /// Changes the display of the card: if it is face up, it will be flipped face down and vice-versa.
         /// </summary>
-        public void flip() {
+        public void Flip() {
             this.IsFaceUp = !this.IsFaceUp;
         }
 
@@ -55,8 +55,45 @@ namespace TheSenateMaterials
         /// Executes the assigned method for a card.
         /// </summary>
         /// <param name="player"></param>
-        public void activate(IPlayer player) { }
-        #endregion Methods
+        public void Activate(IPlayer player) { }
+        #endregion Action Methods
+
+        #region Helper Functions
+        /// <summary>
+        /// Helper function to provide hard copy of a "Card".
+        /// </summary>
+        /// <returns></returns>
+        public Card Copy()
+        {
+            return new Card() 
+            { 
+                Name = this.Name, 
+                Faction = this.Faction, 
+                IsFaceUp = this.IsFaceUp, 
+                Value = this.Value
+            };
+        }
+
+        /// <summary>
+        /// Two cards are equal if their name, faction and value are the same.
+        /// Whether the cards are both face up or face down does not affect the determination of their equivalence.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            Card other = obj as Card;
+
+            return (other.Name == this.Name) &&
+                   (other.Faction == this.Faction) &&
+                   (other.Value == this.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        #endregion Helper Functions
 
         #region Disposable
         public void Dispose()
