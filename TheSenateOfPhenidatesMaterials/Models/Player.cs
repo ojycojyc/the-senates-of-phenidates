@@ -6,7 +6,7 @@ namespace TheSenateMaterials
 {
     public class Player
     {
-        private IGameService _gameService { get; set; }
+        private IGame _gameService { get; set; }
         private Guid _id { get; set; }
         private List<Card> Hand { get; set; }
 
@@ -14,7 +14,19 @@ namespace TheSenateMaterials
         public String Name { get; set; }
         public Factions Faction { get; set; }
 
-        public Player(IGameService gameService)
+        public Guid ID
+        {
+            get => _id;
+            set { _id = value; }
+        }
+
+        public IGame GameSession
+        {
+            get => _gameService;
+            set { _gameService = value; }
+        }
+
+        public Player(IGame gameService)
         {
             _gameService = gameService;
         }
@@ -26,7 +38,7 @@ namespace TheSenateMaterials
             this.Faction = faction;
         }
 
-        public void draw()
+        public void Draw()
         {
             //_gameService.game
             Card newCard = new Card();

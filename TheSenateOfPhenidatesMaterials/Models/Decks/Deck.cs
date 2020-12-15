@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TheSenateMaterials.Interfaces;
 
 namespace TheSenateMaterials
 {
-    public class Deck : IDeck
+    public class Deck : IDeck, IDisposable
     {
-        public string Name 
+        private bool disposedValue;
+        private IGame _gameService { get; set; }
+
+        public int cardLimit;
+        
+        public string Name { get; set; }
+        public List<Card> Cards { get; set; }
+        public IGame GameSession
         {
-            get;
-            set;
-        }
-        public List<Card> Cards 
-        {
-            get;
-            set;
+            get => _gameService;
+            set { _gameService = value; }
         }
 
-        #region Add methods
+        #region Add 
         /// <summary>
         /// Add a new card to the deck.
         /// </summary>
@@ -44,9 +47,9 @@ namespace TheSenateMaterials
         {
             this.Add(deck.Cards);
         }
-        #endregion Add Methods
+        #endregion Add 
 
-        #region Discard Methods
+        #region Discard 
         public void Discard()
         {
             // Empty the complete deck
@@ -74,8 +77,9 @@ namespace TheSenateMaterials
             int position = FindIndex(card);
             Discard(position, out discardedCard);
         }
-        #endregion Discard Methods
+        #endregion Discard 
 
+        #region Draw
         /// <summary>
         /// Draw the card at a given position from the deck.
         /// </summary>
@@ -97,7 +101,29 @@ namespace TheSenateMaterials
         }
 
         /// <summary>
-        /// Find first card in the deck that is equivalent to the provided Card.
+        /// Draw the card at the top of the deck.
+        /// </summary>
+        /// <param name="position"> Index of the card to be drawn from the deck</param>
+        /// <returns></returns>
+        public Card DrawTop()
+        {
+            return Draw(0);
+        }
+
+        /// <summary>
+        /// Draw the card at the bottom of the deck.
+        /// </summary>
+        /// <param name="position"> Index of the card to be drawn from the deck</param>
+        /// <returns></returns>
+        public Card DrawBottom()
+        {
+            return Draw(this.Cards.Count -1);
+        }
+        #endregion
+
+        #region Find
+        /// <summary>
+        /// Find index of the first card in the deck that is equivalent to the provided Card.
         /// </summary>
         /// <param name="card"></param>
         /// <returns></returns>
@@ -106,7 +132,28 @@ namespace TheSenateMaterials
             return this.Cards.FindIndex(card.Equals);
         }
 
-        #region Read methods
+        /// <summary>
+        /// Find all indexes of cards equivalent to the provided Card. 
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
+        public List<int> FindIndexes(Card card)
+        {
+            List<int> indexes = new List<int>();
+
+            for (int i = 0; i < this.Cards.Count; i++)
+            {
+                if (this.Cards[i].Equals(card))
+                {
+                    indexes.Add(i);
+                }
+            }
+
+            return indexes;
+        }
+        #endregion Find
+
+        #region Read
         /// <summary>
         /// Return card information for card in given position.
         /// </summary>
@@ -126,8 +173,9 @@ namespace TheSenateMaterials
         {
             return this.Read(this.Cards.Count-1);
         }
-        #endregion Read methods
+        #endregion Read
 
+        #region Shuffle
         /// <summary>
         /// Implement a modern version of "Fisher-Yates" shuffle
         /// </summary>
@@ -147,7 +195,9 @@ namespace TheSenateMaterials
                 this.Cards[randPosition] = temp;
             }
         }
+        #endregion Shuffle
 
+        #region Sort
         /// <summary>
         /// Completely sort the deck by faction with the greatest number of cards, in decending order of value.
         /// </summary>
@@ -157,5 +207,70 @@ namespace TheSenateMaterials
                       .OrderByDescending(card => card.Count())
                       .SelectMany(card => card.OrderByDescending(c => c.Value));
         }
+        #endregion Sort
+
+        #region Helper Functions
+        /// <summary>
+        /// Helper function to provide hard copy of a "Card".
+        /// </summary>
+        /// <returns></returns>
+        public Deck Copy()
+        {
+            return new Deck()
+            {
+                Name = this.Name,
+                Cards = this.Cards.Select(card=>card.Copy()).ToList()
+            };
+        }
+
+        /// <summary>
+        /// Two cards are equal if their name, faction and value are the same.
+        /// Whether the cards are both face up or face down does not affect the determination of their equivalence.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            Deck other = obj as Deck;
+
+            return (other.Name == this.Name) && (other.Cards == this.Cards);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        #endregion Helper Functions
+
+        #region Disposable
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~Deck()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        void IDisposable.Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion Disposable
     }
 }

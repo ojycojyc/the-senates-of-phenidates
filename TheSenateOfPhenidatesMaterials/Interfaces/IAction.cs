@@ -4,8 +4,7 @@ using System.Text;
 
 namespace TheSenateMaterials.Interfaces
 {
-    public interface IActionable
-    {
+    public interface IAction    {
         
     }
 }
