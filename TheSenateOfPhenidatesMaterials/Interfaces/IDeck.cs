@@ -13,6 +13,5 @@ namespace TheSenateMaterials
         Card Read(int position);
 
         Card Draw(int position);
-
     }
 }

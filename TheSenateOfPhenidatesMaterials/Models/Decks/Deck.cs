@@ -8,7 +8,7 @@ namespace TheSenateMaterials
     public class Deck : IDeck, IDisposable
     {
         private bool disposedValue;
-        private IGame _gameService { get; set; }
+        private IGame _game { get; set; }
 
         public int cardLimit;
         
@@ -16,8 +16,17 @@ namespace TheSenateMaterials
         public List<Card> Cards { get; set; }
         public IGame GameSession
         {
-            get => _gameService;
-            set { _gameService = value; }
+            get => _game;
+            set { _game = value; }
+        }
+
+        public Deck(){ }
+
+        public Deck(IGame game, string name, List<Card> cards = null)
+        {
+            this.GameSession = game;
+            this.Name = name;
+            this.Cards = cards;
         }
 
         #region Add 
@@ -203,7 +212,7 @@ namespace TheSenateMaterials
         /// </summary>
         public void Sort()
         {
-            this.Cards.GroupBy(card => card.Faction)
+            this.Cards.GroupBy(card => card.Suit)
                       .OrderByDescending(card => card.Count())
                       .SelectMany(card => card.OrderByDescending(c => c.Value));
         }

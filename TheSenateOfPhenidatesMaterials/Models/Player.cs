@@ -4,11 +4,11 @@ using TheSenateMaterials.Interfaces;
 
 namespace TheSenateMaterials
 {
-    public class Player
+    public class Player: IDisposable
     {
-        private IGame _gameService { get; set; }
-        private Guid _id { get; set; }
-        private List<Card> Hand { get; set; }
+        private bool disposedValue;
+        private Guid _id;
+        private List<Card> Hand;
 
 
         public String Name { get; set; }
@@ -20,15 +20,11 @@ namespace TheSenateMaterials
             set { _id = value; }
         }
 
-        public IGame GameSession
-        {
-            get => _gameService;
-            set { _gameService = value; }
-        }
+        public IGame GameSession { get; set; }
 
-        public Player(IGame gameService)
+        public Player(IGame game)
         {
-            _gameService = gameService;
+            GameSession = game;
         }
 
         public Player(String name, Factions faction)
@@ -44,6 +40,37 @@ namespace TheSenateMaterials
             Card newCard = new Card();
             Hand.Add(newCard);
         }
+
+        #region Disposable
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~Game()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        void IDisposable.Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion Disposable
 
     }
 }

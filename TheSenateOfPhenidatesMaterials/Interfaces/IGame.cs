@@ -8,7 +8,9 @@ namespace TheSenateMaterials.Interfaces
     {
         public abstract void Register(Player player);
 
-        public abstract void Act(Player player);
+        public abstract void Register(Deck deck);
+
+        public abstract void Act(IAction action);
 
         public abstract void Initiate();
 

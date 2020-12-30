@@ -15,7 +15,7 @@ namespace TheSenateMaterials
         /// Equivalent to the concept of "suits"
         /// Property describes the faction to which the card belongs to.
         /// </summary>
-        public Factions Faction { get; set; } = Factions.Factionless;
+        public Suits Suit { get; set; } = Suits.Blank;
 
         /// <summary>
         /// Property defining the value of a card, if any.
@@ -40,7 +40,7 @@ namespace TheSenateMaterials
         public string Read()
         {
             return $@"Name: {this.Name} 
-                      Faction: {this.Faction}
+                      Suit: {this.Suit}
                       Value: {this.Value}";
         }
 
@@ -55,7 +55,7 @@ namespace TheSenateMaterials
         /// Executes the assigned method for a card.
         /// </summary>
         /// <param name="player"></param>
-        public void Activate(IPlayer player) { }
+        public void Activate(Player player) { }
         #endregion Action Methods
 
         #region Helper Functions
@@ -68,7 +68,7 @@ namespace TheSenateMaterials
             return new Card() 
             { 
                 Name = this.Name, 
-                Faction = this.Faction, 
+                Suit = this.Suit, 
                 IsFaceUp = this.IsFaceUp, 
                 Value = this.Value
             };
@@ -85,7 +85,7 @@ namespace TheSenateMaterials
             Card other = obj as Card;
 
             return (other.Name == this.Name) &&
-                   (other.Faction == this.Faction) &&
+                   (other.Suit == this.Suit) &&
                    (other.Value == this.Value);
         }
 

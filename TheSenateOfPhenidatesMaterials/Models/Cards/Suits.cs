@@ -3,12 +3,12 @@
 namespace TheSenateMaterials
 {
     /// <summary>
-    /// Enum describing the factions to which a player and their deck can belong to.
+    /// Enum describing the suits in a standard deck.
     /// Ideally more extensible.
     /// </summary>
-    public enum Factions
+    public enum Suits
     {
-        Factionless =0, //TODO: Replace with easily extensible class?
+        Blank =0,
         Trebles,
         Hearts,
         Diamonds,
